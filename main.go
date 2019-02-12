@@ -3,6 +3,8 @@ package main
 import (
 	"bytes"
 	"encoding/json"
+	"errors"
+	"flag"
 	"fmt"
 	"io/ioutil"
 	"net/http"
@@ -26,6 +28,13 @@ type ResponseJson struct {
 }
 
 func main() {
+	strOpt := flag.String("url", "", "shorten the URL")
+	flag.Parse()
+	if *strOpt == "" {
+		err := errors.New("not found url")
+		panic(err)
+	}
+
 	err := godotenv.Load("config.env")
 	if err != nil {
 		panic(err)
@@ -33,8 +42,7 @@ func main() {
 
 	url := "https://firebasedynamiclinks.googleapis.com/v1/shortLinks?key=" + os.Getenv("FIREBASE_KEY")
 
-	longLink := os.Args[1]
-	requestJson := &RequestJson{os.Getenv("DOMAIN") + "/?link=" + longLink, Suffix{"SHORT"}}
+	requestJson := &RequestJson{os.Getenv("DOMAIN") + "/?link=" + *strOpt, Suffix{"SHORT"}}
 
 	requestJsonByte, err := json.Marshal(requestJson)
 	if err != nil {
