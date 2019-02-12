@@ -24,3 +24,5 @@ $ go build main.go
 ```terminal
 $ ./main URL
 ```
+
+結構雑っす。
