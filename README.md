@@ -22,7 +22,7 @@ $ go build main.go
 
 ## 6. Create Short URL
 ```terminal
-$ ./main URL
+$ ./main -url URL
 ```
 
 結構雑っす。
