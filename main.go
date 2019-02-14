@@ -25,13 +25,15 @@ type ResponseJson struct {
 	PreviewLink string
 }
 
+const dynamicLinksApiUrl = "https://firebasedynamiclinks.googleapis.com/v1/shortLinks?key="
+
 func main() {
 	err := godotenv.Load("config.env")
 	if err != nil {
 		panic(err)
 	}
 
-	url := "https://firebasedynamiclinks.googleapis.com/v1/shortLinks?key=" + os.Getenv("FIREBASE_KEY")
+	url := dynamicLinksApiUrl + os.Getenv("FIREBASE_KEY")
 
 	longLink := os.Args[1]
 	requestJson := &RequestJson{os.Getenv("DOMAIN") + "/?link=" + longLink, Suffix{"SHORT"}}
@@ -53,12 +55,12 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	defer res.Body.Close()
 
 	body, err := ioutil.ReadAll(res.Body)
 	if err != nil {
 		panic(err)
 	}
+	defer res.Body.Close()
 
 	var responseJson ResponseJson
 
@@ -67,5 +69,5 @@ func main() {
 		panic(err)
 	}
 
-	fmt.Println(responseJson.ShortLink)
+	fmt.Print(responseJson.ShortLink)
 }
